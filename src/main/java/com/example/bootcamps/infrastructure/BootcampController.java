@@ -1,5 +1,6 @@
 package com.example.bootcamps.infrastructure;
 
+import com.example.bootcamps.application.BootcampDTO;
 import com.example.bootcamps.application.BootcampService;
 import com.example.bootcamps.domain.model.Bootcamp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,10 @@ public class BootcampController {
     }
 
     @GetMapping
-    public Flux<Bootcamp> listBootcamps(@RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "10") int size,
-                                        @RequestParam(defaultValue = "name") String sortField,
-                                        @RequestParam(defaultValue = "asc") String sortOrder) {
+    public Flux<BootcampDTO> listBootcamps(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int size,
+                                           @RequestParam(defaultValue = "name") String sortField,
+                                           @RequestParam(defaultValue = "asc") String sortOrder) {
         return bootcampService.listBootcamps(page, size, sortField, sortOrder);
     }
 

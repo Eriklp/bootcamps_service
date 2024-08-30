@@ -21,7 +21,7 @@ public class Bootcamp {
     // Almacenar identificadores de capacidades como Strings
     @ElementCollection
     @CollectionTable(name = "bootcamp_capacities", joinColumns = @JoinColumn(name = "bootcamp_id"))
-    @Column(name = "capacity_id")
+    @Column(name = "capacity_names")
     private Set<String> capacities = new HashSet<>();
 
     public Bootcamp() {
