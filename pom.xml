@@ -9,9 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>bootcamps</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>bootcamps</name>
+	<artifactId>bootcamps-service</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+	<name>bootcamps service</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/bootcamps")
+@RequestMapping("/")
 public class BootcampController {
 
     private final BootcampService bootcampService;
