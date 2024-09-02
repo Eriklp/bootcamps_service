@@ -2,9 +2,11 @@ package com.example.bootcamps.infrastructure;
 
 import com.example.bootcamps.application.BootcampDTO;
 import com.example.bootcamps.application.BootcampService;
+import com.example.bootcamps.domain.exception.CustomException;
 import com.example.bootcamps.domain.model.Bootcamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -45,5 +47,10 @@ public class BootcampController {
         return bootcampService.deleteBootcamp(id);
     }
 
-    // Otros métodos según sean necesarios
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<String> handleCustomException(CustomException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
 }

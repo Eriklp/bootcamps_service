@@ -1,5 +1,7 @@
 package com.example.bootcamps.application;
 
+import com.example.bootcamps.client.CapacityServiceClient;
+import com.example.bootcamps.domain.exception.CustomException;
 import com.example.bootcamps.domain.model.Bootcamp;
 import com.example.bootcamps.domain.repository.BootcampRepository;
 import jakarta.transaction.Transactional;
@@ -13,22 +15,40 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BootcampService {
 
     private final BootcampRepository bootcampRepository;
 
+    private final CapacityServiceClient capacityServiceClient;
+
     @Autowired
-    public BootcampService(BootcampRepository bootcampRepository) {
+    public BootcampService(BootcampRepository bootcampRepository, CapacityServiceClient capacityServiceClient) {
         this.bootcampRepository = bootcampRepository;
+        this.capacityServiceClient = capacityServiceClient;
     }
 
     public Mono<Bootcamp> createBootcamp(Bootcamp bootcamp) {
-        return Mono.just(bootcampRepository.save(bootcamp));
+        return validateCapacities(bootcamp.getCapacities())
+                .flatMap(valid -> {
+                    if (valid) {
+                        return Mono.just(bootcampRepository.save(bootcamp));
+                    } else {
+                        return Mono.error(new CustomException("Una o más capacidades no existen."));
+                    }
+                });
+        //return Mono.just(bootcampRepository.save(bootcamp));
     }
 
+    public Mono<Boolean> validateCapacities(Set<String> capacities) {
+        return capacityServiceClient.validateExistence(new ArrayList<>(capacities));
+    }
     public Mono<Bootcamp> getBootcampById(Long id) {
         return Mono.justOrEmpty(bootcampRepository.findById(id));
     }
@@ -56,5 +76,4 @@ public class BootcampService {
         // Convierte a DTO
         return new BootcampDTO(bootcamp.getId(), bootcamp.getName(), bootcamp.getDescription(), new HashSet<>(bootcamp.getCapacities()));
     }
-    // Otros métodos que devuelven Mono o Flux según corresponda
 }
